@@ -1,0 +1,27 @@
+{
+  "name": "fivem-report-system",
+  "version": "1.0.0",
+  "description": "FiveM Report System",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clearbuild && npm run typecheck && node build/build-bundle.js",
+    "clearbuild": "rimraf ./dist",
+    "typecheck": "tsc --noEmit -p client/tsconfig.json && tsc --noEmit -p server/tsconfig.json",
+    "watch": "npm run clearbuild && cross-env IS_WATCH_MODE=1 node build/build-bundle.js"
+  },
+  "author": "DaPickle",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.7.7",
+    "discord.js": "^13.14.0"
+  },
+  "devDependencies": {
+    "@citizenfx/client": "^2.0.6063-1",
+    "@citizenfx/server": "^2.0.6063-1",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.19.10",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.3.3"
+  },
+  "fivemIgnore": true
+}
