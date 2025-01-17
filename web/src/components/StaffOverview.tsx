@@ -13,15 +13,15 @@ type props = {
 
 const StaffOverview = ({ staff, timeFilter }: props) => {
     const labels = timeFilter == Time.MONTH ? getMonthLabels() : getWeekLabels();
-    const firstResponseTimes: number[] = []
-    const responseTimes: number[] = staff.responses.map(resp => {
+    const firstResponseTimes: [number, number][] = []
+    const responseTimes: [number, number][] = staff.responses.map(resp => {
         if (resp.primaryStaff?.staff.discordId === staff.staff.discordId) {
-            firstResponseTimes.push(resp.createdAt);
+            firstResponseTimes.push([resp.createdAt, 1]);
         }
 
-        return resp.createdAt;
+        return [resp.createdAt, 1];
     });
-    const solvedReportsTimes: number[] = staff.solvedReports.map(report => report.createdAt);
+    const solvedReportsTimes: [number, number][] = staff.solvedReports.map(report => [report.createdAt, 1]);
     return (
         <div className="mt-[1vh] flex flex-col gap-[2vh] h-[54vh] statisticsLoader">
             <ScrollArea className="pr-[2vh]">

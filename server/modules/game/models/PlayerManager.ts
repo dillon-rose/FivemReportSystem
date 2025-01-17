@@ -32,6 +32,10 @@ class PlayerManager {
 
                 player.trustscore = trustscore ? trustscore : player.trustscore;
                 player.playtime = playtime ? playtime : player.playtime;
+
+                if (player.left) return;
+
+                player.sessionLength += (Config.PLAYER_UPDATE_INTERVAL / 1000);
             });
 
             this.updatePlayersForClients();
@@ -59,6 +63,8 @@ class PlayerManager {
             steam,
             trustscore: await getPlayerTrustscore(id),
             playtime: await getPlayerPlaytime(id),
+            sessionLength: 0,
+            joinTime: Date.now(),
         }
 
         const discord = getPlayerDiscord(id);
@@ -84,7 +90,7 @@ class PlayerManager {
             id,
             name: GetPlayerName(id.toString()),
             discordId,
-            rank: staffRank,
+            rank: staffRank
         }
 
         this.staff.set(id, staff);

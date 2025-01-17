@@ -30,6 +30,7 @@ const Player = () => {
     id: parseInt(playerId || "0"),
     name: "",
     steam: "0",
+    sessionLength: 0,
   }
 
   function addNote(staff: Staff, rating: TRating, note: string) {

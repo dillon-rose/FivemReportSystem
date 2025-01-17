@@ -13,9 +13,8 @@ CREATE TABLE IF NOT EXISTS `p_reports` (
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=109
+AUTO_INCREMENT=1
 ;
-
 CREATE TABLE IF NOT EXISTS `p_report_notes` (
 	`reportId` INT(11) NULL DEFAULT NULL,
 	`targetDiscord` VARCHAR(19) NOT NULL COLLATE 'utf8mb4_general_ci',
@@ -30,9 +29,8 @@ CREATE TABLE IF NOT EXISTS `p_report_notes` (
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=5
+AUTO_INCREMENT=1
 ;
-
 CREATE TABLE IF NOT EXISTS `p_report_responses` (
 	`reportId` INT(11) NOT NULL,
 	`time` INT(11) NOT NULL,
@@ -42,5 +40,12 @@ CREATE TABLE IF NOT EXISTS `p_report_responses` (
 	CONSTRAINT `P_report_respponses_reportId_Fkey` FOREIGN KEY (`reportId`) REFERENCES `p_reports` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE IF NOT EXISTS `p_staff_playtime` (
+	`staffDiscord` VARCHAR(19) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`joinTime` INT(11) NOT NULL,
+	`sessionLength` INT(11) NOT NULL
+)
 ENGINE=InnoDB
 ;

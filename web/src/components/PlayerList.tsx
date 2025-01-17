@@ -56,6 +56,10 @@ const PlayerList = ({ players, onPlayerClick, onReportClick }: props) => {
                                 <p className="text-sm text-slate-400"> {Math.floor(player.playtime / 24)} days {player.playtime % 24} hours</p>
                             </div>
                         )}
+                        <div>
+                            Session Length:
+                            <p className="text-sm text-slate-400"> {Math.floor(player.sessionLength / (60 * 60 * 24))} days {Math.floor((player.sessionLength / (60 * 60)) % 24 )} hours {Math.floor(player.sessionLength / 60) % 60} minutes</p>
+                        </div>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>

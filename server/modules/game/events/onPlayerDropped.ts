@@ -13,6 +13,12 @@ on("playerDropped", async (_: string) => {
             await game.reportManager.removePrimaryFromReport(reportNumber);
         }
     }
+
+    const staff = game.playerManager.getInGameStaff(source);
+
+    if (staff) {
+        await DBManager.addStaffSession(staff.discordId, player?.joinTime || Date.now(), (player?.sessionLength || 0));
+    }
     
     game.playerManager.playerLeft(source);
 });

@@ -44,3 +44,9 @@ export type DBNote = {
     noteId: number,
     timestamp: number,
 }
+
+export type DBStaffPlaytime = {
+    staffDiscord: string,
+    joinTime: number,
+    sessionLength: number,
+}

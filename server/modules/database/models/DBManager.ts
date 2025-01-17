@@ -1,6 +1,6 @@
-import { Time, TRating, TReport, Player, Staff, Note } from "@common/types";
+import { Time, TRating, TReport, Player, Staff, Note, StaffPlaytime } from "@common/types";
 import { discordManager } from "@server/modules/discord";
-import { DBNote, DBReport, DBResponse, Nullable } from "@server/types";
+import { DBNote, DBReport, DBResponse, DBStaffPlaytime, Nullable } from "@server/types";
 
 class DBManager {
     public static oneWeek: number = 60 * 60 * 24 * 7;
@@ -111,11 +111,15 @@ class DBManager {
                     name: report.creatorName,
                     steam: report.creatorHex,
                     id: -1,
+                    joinTime: 0,
+                    sessionLength: 0,
                 },
                 offender: report.offenderName ? {
                     name: report.offenderName,
                     steam: report.offenderHex,
                     id: -1,
+                    joinTime: 0,
+                    sessionLength: 0,
                 } : undefined,
                 createdAt: report.createdAt * 1000,
                 description: report.description,
@@ -158,12 +162,37 @@ class DBManager {
         const newPrimarySuccess = await exports.oxmysql.update_async('UPDATE p_report_responses SET isPrimary = 1 WHERE reportId = ? AND staffDiscord = ?', [reportId, newPrimaryDiscord])
 
         return [removePrimarySuccess, newPrimarySuccess || null];
+    }
 
+    public static async addStaffSession(discordId: string, joinTime: number, sessionLength: number): Promise<boolean> {
+        // stores join time in seconds since epoch and session length in minutes
+        const id = await exports.oxmysql.insert_async('INSERT INTO p_staff_playtime (staffDiscord, joinTime, sessionLength) VALUES (?, ?, ?)', [discordId, joinTime / 1000, sessionLength / 60]);
+
+        return id >= 0;
+    }
+
+    public static async getStaffSessions(discordId: string, time: Time): Promise<StaffPlaytime> {
+        const timeInSeconds = time === Time.WEEK ? DBManager.oneWeek : DBManager.oneMonth;
+        const timeStamp = (Date.now() / 1000) - timeInSeconds;
+
+        const res = await exports.oxmysql.rawExecute_async('SELECT joinTime, sessionLength FROM p_staff_playtime WHERE staffDiscord = ? AND joinTime > ?', [discordId, timeStamp]) as Omit<DBStaffPlaytime, 'staffDiscord'>[];
+
+        const staff = await discordManager.getStaff(discordId);
+
+        return {
+            staff: staff || {
+                discordId: "N/A",
+                name: "Retired Staff",
+                rank: "N/A"
+            },
+            sessions: res.map(session => ({startTime: session.joinTime * 1000, length: session.sessionLength})),
+        };
     }
 
     private async cleanTables() {
         await exports.oxmysql.query_async('DELETE FROM p_reports WHERE createdAt < ?', [(Date.now() / 1000) - DBManager.oneMonth]);
         await exports.oxmysql.query_async('DELETE FROM p_report_notes WHERE timestamp < ?', [(Date.now() / 1000) - DBManager.oneMonth]);
+        await exports.oxmysql.query_async('DELETE FROM p_staff_playtime WHERE joinTime < ?', [(Date.now() / 1000) - DBManager.oneMonth]);
     }
 
     private static async convertDBReportToReport(DBReports: (DBReport & (DBResponse | Nullable<DBResponse>))[]): Promise<TReport[]> {
@@ -177,11 +206,15 @@ class DBManager {
                         name: rawReport.creatorName,
                         steam: rawReport.creatorHex,
                         id: -1,
+                        joinTime: 0,
+                        sessionLength: 0,
                     },
                     offender: rawReport.offenderName ? {
                         id: -1,
                         name: rawReport.offenderName,
                         steam: rawReport.offenderHex || "0",
+                        joinTime: 0,
+                        sessionLength: 0,
                     } : undefined,
                     createdAt: rawReport.createdAt * 1000,
                     description: rawReport.description,
@@ -238,11 +271,15 @@ class DBManager {
                         name: rawReport.creatorName,
                         steam: rawReport.creatorHex,
                         id: -1,
+                        joinTime: 0,
+                        sessionLength: 0,
                     },
                     offender: rawReport.offenderName ? {
                         id: -1,
                         name: rawReport.offenderName,
                         steam: rawReport.offenderHex || "0",
+                        joinTime: 0,
+                        sessionLength: 0,
                     } : undefined,
                     createdAt: rawReport.createdAt * 1000,
                     description: rawReport.description,

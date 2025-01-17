@@ -10,4 +10,5 @@ import "./callbacks/getNonPunishmentCountOverTime";
 import "./callbacks/getPlayerReports";
 import "./callbacks/getPunishmentCountOverTime";
 import "./callbacks/getReportCountOverTime";
+import "./callbacks/getStaffPlaytime";
 import "./callbacks/getStaffStats";

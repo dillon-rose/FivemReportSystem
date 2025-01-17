@@ -27,6 +27,15 @@ export interface Staff {
 
 export interface InGameStaff extends Staff {
     id: number,
+    sessionLength: number,
+}
+
+export type StaffPlaytime = {
+    staff: Staff,
+    sessions: {
+        startTime: number,
+        length: number,
+    }[]
 }
 
 export type Response = {
@@ -84,6 +93,7 @@ export type Player = {
     id: number,
     name: string,
     steam: string,
+    sessionLength: number,
     reportNumber?: number,
     left?: boolean,
     trustscore?: number,

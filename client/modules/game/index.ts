@@ -35,6 +35,7 @@ import "./nuiCallbacks/getReports";
 import "./nuiCallbacks/getPunishmentCountOverTime";
 import "./nuiCallbacks/getReportCountOverTime";
 import "./nuiCallbacks/getStaff";
+import "./nuiCallbacks/getStaffPlaytime";
 import "./nuiCallbacks/hideFrame";
 import "./nuiCallbacks/respondToReport";
 import "./nuiCallbacks/solveReport";

@@ -16,6 +16,7 @@ import StaffNotes from "@/components/StaffNotes";
 import StaffNote from "@/components/StaffNote";
 import { fetchNui } from "@/utils/fetchNui";
 import { toast } from "sonner";
+import StaffPlaytime from "@/components/StaffPlaytime";
 
 const Staff = () => {
     const { staffId } = useParams();
@@ -23,7 +24,7 @@ const Staff = () => {
     const [staffPageLoader] = useLoader(".staffPageLoader");
     const [timeFilter, setTimeFilter] = useState<Time>(Time.WEEK);
     const [staff] = useStaff(staffId, timeFilter, staffPageLoader);
-    const [sectionFilter, setSectionFilter] = useState<"overview" | "responses" | "solved" | "notes">("overview");
+    const [sectionFilter, setSectionFilter] = useState<"overview" | "responses" | "solved" | "notes" | "playtime">("overview");
 
     function addNote(staff: TStaff, rating: TRating, note: string) {
         fetchNui<boolean>('addNote', { reportNumber: null, staffId: staff.discordId, rating, note })
@@ -98,6 +99,12 @@ const Staff = () => {
                             >
                             Notes
                             </TabsTrigger>
+                            <TabsTrigger
+                            value="playtime"
+                            className="text-zinc-600 dark:text-zinc-200"
+                            >
+                            Playtime
+                            </TabsTrigger>
                         </TabsList>
                     </Tabs>
                     <StaffNote staffMember={staff.staff} onSubmit={addNote} />
@@ -114,6 +121,9 @@ const Staff = () => {
                 ))
                 || (sectionFilter === "notes" && (
                     <StaffNotes notes={staff.notes}/>
+                ))
+                || (sectionFilter === "playtime" && (
+                    <StaffPlaytime staffDiscordId={staff.staff.discordId} timeFilter={timeFilter}/>
                 ))
                 }
                 
