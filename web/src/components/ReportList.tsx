@@ -31,7 +31,9 @@ const ReportList = ({ reports, filter }: props) => {
         <ScrollArea className="h-full">
             <div className="flex flex-col gap-[1vh] p-[2vh] pt-0 transition-all">
                 {reports.reduceRight((arr: ReactNode[], report: GameReport) => {
-                    if (filter === "new" && report.status !== Statuses.UNSOLVED) return (arr = arr.concat(<></>));
+                    if (!report) return arr;
+
+                    if (filter === "new" && report.status !== Statuses.UNSOLVED) return arr;
                     
                     return (arr = arr.concat(
                         <div

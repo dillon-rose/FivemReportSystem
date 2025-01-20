@@ -12,7 +12,7 @@ callbacks.registerServerCallback("updateReportStatus", async (source: number, re
     
     if (!player) return false;
     
-    if (player.reportNumber && player.reportNumber !== reportNumber) {
+    if (player.reportNumber !== undefined && player.reportNumber !== reportNumber) {
         error(source, "You are already handling a report. Finish that one first.");
         return false;
     }

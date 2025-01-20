@@ -9,6 +9,7 @@ const Config = {
         "Senior Moderator": Permission.USER,
         "Moderator": Permission.USER,
         "Trial Moderator": Permission.USER,
+        "No Rank": Permission.UNAUTHORIZED,
     },
 
     // time a person stays on the player list after leaving

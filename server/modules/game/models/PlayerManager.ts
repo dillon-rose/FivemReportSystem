@@ -191,7 +191,7 @@ class PlayerManager {
         const roles = await discordManager.getMemberRoles(discordId);
         const role = discordManager.getHighestRole(roles);
 
-        return role.name as TStaffRole;
+        return role?.name as TStaffRole || "No Rank";
     }
 
 }

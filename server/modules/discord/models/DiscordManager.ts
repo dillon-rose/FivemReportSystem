@@ -37,7 +37,7 @@ class DiscordManager {
                         this.allStaff.set(newMember.id, {
                             name: newMember.displayName,
                             discordId: newMember.id,
-                            rank: this.getHighestRole(Array.from(newMember.roles.cache.values())).name
+                            rank: this.getHighestRole(Array.from(newMember.roles.cache.values()))?.name || "No Rank"
                         });
                     }
                 }
@@ -90,7 +90,9 @@ class DiscordManager {
         return staffMembers.get(discordId);
     }
 
-    public getHighestRole = (roles: Role[]): Role => {
+    public getHighestRole = (roles: Role[]): Role | null => {
+        if (roles.length === 0) return null;
+
         let highestRole = roles[0];
         let roleVal: Permission = config.STAFF_ROLES[highestRole.name as TStaffRole] || Permission.UNAUTHORIZED;
 
@@ -121,7 +123,7 @@ class DiscordManager {
                 staffMap.set(member.id, {
                     name: member.displayName,
                     discordId: member.id,
-                    rank: this.getHighestRole(Array.from(member.roles.cache.values())).name
+                    rank: this.getHighestRole(Array.from(member.roles.cache.values()))?.name || "No Rank"
                 });
             });
 

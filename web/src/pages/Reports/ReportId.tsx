@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { StateContext } from "@/providers/ContextProvider"
 import { useGameReportsContext } from "@/providers/GameReportsProvider"
-import { GameReport, Permission, Staff, Statuses, TRating, TReport } from "@/types/types"
+import { Permission, Staff, Statuses, TRating, TReport } from "@/types/types"
 import { fetchNui } from "@/utils/fetchNui"
 import { ChevronLeft } from "lucide-react"
 import { useNavigate, useParams } from "react-router-dom"
@@ -22,7 +22,7 @@ const Report = () => {
   const context = useContext(StateContext);
   const reportsContext = useGameReportsContext();
 
-  if (!reportNumber) return <ErrorPage message="No report number provided"/>
+  if (reportNumber === undefined) return <ErrorPage message="No report number provided"/>
 
   const report = reportsContext.getReport(parseInt(reportNumber));
 
