@@ -1,4 +1,4 @@
-import { Player } from "@common/types";
+import { Permission, Player } from "@common/types";
 import { discordManager } from "@server/modules/discord";
 import Config, { TStaffRole } from "@server/sv_config";
 import { InGameStaff } from "@server/types";
@@ -70,7 +70,7 @@ class PlayerManager {
         const discord = getPlayerDiscord(id);
         const staffRank = await this.getPlayerRank(discord);
 
-        if (staffRank && Config.STAFF_ROLES[staffRank]) {
+        if (staffRank && Config.STAFF_ROLES[staffRank] !== Permission.UNAUTHORIZED) {
             this.addStaff(id, staffRank, discord as string);
         }
 
@@ -188,10 +188,9 @@ class PlayerManager {
     private async getPlayerRank(discordId: string | null) {
         if (!discordId) return;
 
-        const roles = await discordManager.getMemberRoles(discordId);
-        const role = discordManager.getHighestRole(roles);
+        const staff = await discordManager.getStaff(discordId);
 
-        return role?.name as TStaffRole || "No Rank";
+        return staff?.rank as TStaffRole;
     }
 
 }

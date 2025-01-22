@@ -58,22 +58,6 @@ class DiscordManager {
         this.client.login(config.BOT_TOKEN);
     }
 
-    public getMemberRoles = async (memberId: string | null): Promise<Role[]> => {
-        return await new Promise((resolve) => {
-            if (!memberId) resolve([]);
-
-            this.guild?.members.fetch(memberId as string).then((member) => {
-                if (!member) resolve([]);
-
-                let roles = member.roles.cache.values();
-
-                resolve(Array.from(roles));
-            }).catch((err) => {
-                resolve([]);
-            });
-        });
-    }
-
     public getAllStaff = async (): Promise<Map<string, Staff>> => {
         if (this.allStaff.size === 0) {
             this.allStaff = await this.getAllStaffHelper();

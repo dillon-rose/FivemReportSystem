@@ -84,10 +84,10 @@ class DBManager {
 
             notes.set(rawNote.noteId, {
                 creator: noteCreator || {
-                    discordId: "N/A",
-                    name: "Retired Staff",
-                    rank: "N/A"
-                },
+                name: "N/A [" + rawNote.creatorDiscord + "]",
+                discordId: rawNote.creatorDiscord,
+                rank: "Retired"
+            },
                 description: rawNote.note,
                 rating: rawNote.rating,
                 staffId: rawNote.targetDiscord,
@@ -181,9 +181,9 @@ class DBManager {
 
         return {
             staff: staff || {
-                discordId: "N/A",
-                name: "Retired Staff",
-                rank: "N/A"
+                name: "N/A [" + discordId + "]",
+                discordId: discordId,
+                rank: "Retired"
             },
             sessions: res.map(session => ({startTime: session.joinTime * 1000, length: session.sessionLength})),
         };
@@ -236,9 +236,9 @@ class DBManager {
                     lastReport.primaryStaff = {
                         time: report.time * 1000,
                         staff: staff ?? {
-                            name: "Retired Staff",
+                            name: "N/A [" + report.staffDiscord + "]",
                             discordId: report.staffDiscord,
-                            rank: "Retired",
+                            rank: "Retired"
                         },
                     }
                 }
