@@ -4,11 +4,11 @@ game "gta5"
 author "Pickle"
 description "scoreboard for LADOJRP"
 
-ui_page "src/web/dist/index.html"
+ui_page "web/build/index.html"
 
 files {
-	"src/web/dist/index.html",
-	"src/web/dist/**/*"
+	"web/build/index.html",
+	"web/build/**/*"
 }
 
 server_script "dist/server/420.server.js"
