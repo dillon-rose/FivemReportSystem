@@ -1,7 +1,6 @@
 import { Permission } from "@common/types";
 
 const Config = {
-    // [discord role name]: [permission level]
     STAFF_ROLES: {
         "Executive Staff": Permission.ADMIN,
         "Senior Administrator": Permission.ADMIN,

@@ -43,7 +43,7 @@ const ReportList = ({ reports, filter }: props) => {
                             <div className="flex w-full flex-col gap-[0.5vh] text-lg">
                                 <div className="grid grid-cols-[80%_20%]">
                                     <div className="flex items-center gap-[1vh] break-all">
-                                        <div className="font-semibold">{report.description.substring(0, 50)}</div>
+                                        <div className="font-semibold">{report.description?.substring(0, 50) || "No Description"}</div>
                                     </div>
                                     <div
                                     className={"ml-auto text-sm"}

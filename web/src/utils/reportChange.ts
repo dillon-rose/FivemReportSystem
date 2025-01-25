@@ -65,6 +65,5 @@ export const respondToReport = (reportNumber: number) => {
     fetchNui<boolean>('respondToReport', { reportNumber })
     .catch((e) => {
         console.error(e);
-        toast.error("Failed to respond to report");
     });
 }

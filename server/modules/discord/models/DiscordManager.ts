@@ -1,4 +1,4 @@
-import { Client, Intents, Guild, Role } from "discord.js";
+import { Client, GatewayIntentBits, Guild, Role } from "discord.js";
 import config, { TStaffRole } from "@server/sv_config";
 import { Permission, Staff } from "@common/types";
 
@@ -14,7 +14,7 @@ class DiscordManager {
         this.allStaff = new Map<string, Staff>();
 
         this.client = new Client({
-            intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.MESSAGE_CONTENT],
+            intents: [GatewayIntentBits.GuildMembers, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
         });
 
         console.log("Logging in to discord...");
@@ -48,6 +48,30 @@ class DiscordManager {
 
         this.client.on("error", (err) => {
             console.log(err);
+        });
+
+        this.client.on('shardDisconnect', (event, id) => {
+            console.log(`shardDisconnect: ${event} | ${id}`);
+        });
+
+        this.client.on('shardError', (error, shardId) => {
+            console.log(`shardError: ${error} | ${shardId}`);
+        });
+
+        this.client.on('shardReady', (id, unavailableGuilds) => {
+            console.log(`shardError: ${id} | ${JSON.stringify(unavailableGuilds)}`);
+        });
+
+        this.client.on('shardReconnecting', (id) => {
+            console.log(`shardReconnecting: ${id}`);
+        });
+
+        this.client.on('shardResume', (id, replayedEvents) => {
+            console.log(`shardResume: ${id} | ${replayedEvents}`);
+        });
+
+        this.client.on('warn', (info) => {
+            console.log(`warn: ${info}`);
         });
 
         this.client.on("rateLimit", (rateLimit) => {

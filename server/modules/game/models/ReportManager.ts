@@ -6,10 +6,14 @@ import { info, success, error, reportNotify } from "@server/utils/notify";
 import DBManager from "@server/modules/database/models/DBManager";
 
 class ReportManager {
-    private reports: GameReport[] = [];
+    private reports: GameReport[];
+    private responseQueue: [number, number][];
+    private isProcessingResponses: boolean;
 
     constructor() {
         this.reports = [];
+        this.responseQueue = [];
+        this.isProcessingResponses = false;
     }
 
     public getReports() {
@@ -70,7 +74,30 @@ class ReportManager {
         return report;
     }
 
-    public async respondToReport(reportNumber: number, staffId: number) {
+    public respondToReport(reportNumber: number, staffId: number) {
+        this.responseQueue.push([reportNumber, staffId]);
+
+        this.processResponses();
+    }
+
+    private async processResponses() {
+        if (this.isProcessingResponses) return;
+
+        this.isProcessingResponses = true;
+
+        while (this.responseQueue.length > 0) {
+            const [reportNumber, staffId] = this.responseQueue.shift()!;
+            
+            const shouldTeleport = await this.respondToReportHelper(reportNumber, staffId);
+
+            if (shouldTeleport) 
+                this.teleportToPlayer(staffId, this.reports[reportNumber].creator.id);
+        }
+
+        this.isProcessingResponses = false;
+    }
+
+    private async respondToReportHelper(reportNumber: number, staffId: number) {
         const staff = game.playerManager.getInGameStaff(staffId);
 
         if (!staff) return false;
@@ -88,6 +115,11 @@ class ReportManager {
         }
 
         const report = this.reports[reportNumber];
+
+        if (report.status === Statuses.SOLVED) {
+            error(staffId, "This report is already solved.");
+            return false;
+        }
 
         if (report.primaryStaff) {
             if (report.primaryStaff?.staff.discordId === staff.discordId || report.attatchedStaff.find(response => response.staff.discordId === staff.discordId)) {
@@ -245,6 +277,13 @@ class ReportManager {
 
     private sendReportToStaff(reportNumber: number) {
         game.playerManager.sendEventToStaff("newReport", this.reports[reportNumber]);
+    }
+
+    private teleportToPlayer(sourceId: number, targetId: number) {
+        const target = GetPlayerPed(targetId.toString());
+        const targetCoords = GetEntityCoords(target);
+
+        SetEntityCoords(GetPlayerPed(sourceId.toString()), targetCoords[0], targetCoords[1], targetCoords[2], false, false, false, false);
     }
 }
 

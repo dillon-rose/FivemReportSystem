@@ -18,6 +18,8 @@ class CommandManager {
 
     public addCommand(newCommand: Command, cb: (source: number, args: string[]) => void) {
         this.commands.push(newCommand);
+
+        emit("esx:addValidCommand", newCommand.name);
         
         RegisterCommand(newCommand.name, (source: number, args: string[]) => {
             if (!newCommand.permissions) {

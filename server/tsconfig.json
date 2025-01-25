@@ -1,22 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "CommonJS",
-    "types": ["@citizenfx/server", "@types/node"],
-    "lib": ["ES2020"],
-    "paths": {
-      "@server/*": [
-        "./*"
-      ],
-      "@common/*": [
-        "../common/*"
-      ]
-    },
-    "baseUrl": ".",
+      "baseUrl": ".",
+      "paths": {
+        "@server/*": [
+          "./*"
+        ],
+        "@common/*": [
+          "../common/*"
+        ],
+        "@/*": ["../*"],
+        "@@/*": ["../../*"]
+      },
+      "outDir": "./",
+      "noImplicitAny": false,
+      "module": "es6",
+      "target": "es6",
+      "allowJs": true,
+      "lib": ["es2017"],
+      "types": ["@citizenfx/server", "node"],
+      "moduleResolution": "node"
   },
-  "include": ["./**/*", "../common"],
-  "exclude": ["**/node_modules", "**/__tests__/*"]
+  "include": [
+      "./**/*"
+  ],
+  "exclude": [
+      
+  ]
 }

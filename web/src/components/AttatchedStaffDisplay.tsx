@@ -51,7 +51,7 @@ const AttatchedStaffDisplay = ({ primaryStaff, attatchedStaff, classname }: prop
                             )
                         }
                         {
-                             attatchedStaff.filter(response => context.permission === Permission.ADMIN || response.staff.discordId === context.myDiscordId)
+                             attatchedStaff.filter(response => context.permission <= Permission.MODERATOR || response.staff.discordId === context.myDiscordId)
                              .map((response) => (
                                 <TableRow key={response.staff.discordId}>
                                     <TableCell>{response.staff.name}</TableCell>
